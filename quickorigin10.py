@@ -49,7 +49,7 @@
 
 bl_info = {
 	"name": "Quick Origin",
-	"author": "ishidourou - (Update from gvgeo)",
+	"author": "ishidourou",
 	"version": (1, 0),
 	"blender": (2, 80, 0),
 	"location": "View3D > Toolbar and View3D",
@@ -68,16 +68,16 @@ class mes():
     title = ('Quick Origin','クイックオリジン')
     btn01 = ('Set Origin','原点を設定')
 
-#def lang():
-#    system = bpy.context.user_preferences.system
-#    if system.use_international_fonts:
-#        if system.language == 'ja_JP':
-#            return 1
-#    return 0
+def lang():
+    pref = bpy.context.preferences
+    if pref.view.use_international_fonts:
+        if pref.view.language == 'ja_JP':
+            return 1
+    return 0
 
 class QuickOriginPanel(bpy.types.Panel):
 	bl_category = "Tools"
-	bl_label = mes.title[0]
+	bl_label = mes.title[lang()]
 	bl_space_type = "VIEW_3D"
 	bl_region_type = "UI"
  
@@ -86,7 +86,7 @@ class QuickOriginPanel(bpy.types.Panel):
 
 class QuickOrigin(bpy.types.Operator):
 	bl_idname = "quick.origin"
-	bl_label = mes.btn01[0]
+	bl_label = mes.btn01[lang()]
 	bl_options = {'REGISTER'}
 
 	def execute(self, context):
@@ -112,6 +112,7 @@ def register():
 def unregister():
 	bpy.utils.unregister_class(QuickOriginPanel)
 	bpy.utils.unregister_class(QuickOrigin)
+	kc = bpy.context.window_manager.keyconfigs.addon
 	if kc:
 		km = kc.keymaps["Mesh"]
 		for kmi in km.keymap_items:
